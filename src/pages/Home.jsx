@@ -7,7 +7,7 @@ import PizzaBlock from '../components/PizzaBlock'
 import PizzaSkeleton from '../components/PizzaBlock/PizzaSkeleton';
 
 
-const Home = () => {
+const Home = ({ searchValue }) => {
 
 	const [pizza, setPizza] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -48,9 +48,13 @@ const Home = () => {
 			<div className="content__items">
 				{isLoading
 					? [...new Array(6)].map((_, index) => <PizzaSkeleton key={index} />)
-					: pizza.map(obj => (
-						<PizzaBlock {...obj} key={obj.id} />
-					))
+					: pizza
+						.filter(obj => (
+							obj.title.toLowerCase().includes(searchValue.toLowerCase())
+						))
+						.map(obj => (
+							<PizzaBlock {...obj} key={obj.id} />
+						))
 				}
 			</div>
 		</div>
