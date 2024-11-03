@@ -1,0 +1,21 @@
+.pagination_wrapper {
+	display: flex;
+	justify-content: center;
+}
+
+.pagination_btn {
+	padding: 10px 15px;
+	border: rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	font-weight: 600;
+	margin-right: 15px;
+
+	&:hover {
+		background-color: #e7e7e7;
+	}
+}
+
+.active {
+	background-color: #282828;
+	color: #fff;
+}
