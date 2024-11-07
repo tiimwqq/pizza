@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-const Sort = ({ sort, setSort }) => {
+import { useSelector, useDispatch } from 'react-redux';
+import { setSort } from '../redux/slices/filterSlice';
+const Sort = () => {
 
 
 	const [isVisible, setIsVisible] = useState(false);
@@ -12,8 +14,11 @@ const Sort = ({ sort, setSort }) => {
 		{ name: 'алфавиту ↑', sortProperty: 'title asc', value: 'asc' },
 	]
 
+	const sort = useSelector(state => state.filter.sort);
+	const dispatch = useDispatch();
+
 	const onClickListActive = (sort) => {
-		setSort(sort);
+		dispatch(setSort(sort));
 		setIsVisible(false)
 	}
 

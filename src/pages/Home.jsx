@@ -1,48 +1,36 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios'
 
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock'
 import PizzaSkeleton from '../components/PizzaBlock/PizzaSkeleton';
 import Pagination from '../components/Pagination';
-
+import { setCategoryId } from '../redux/slices/filterSlice'
 
 
 const Home = ({ searchValue }) => {
 
 	const [pizza, setPizza] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
-	const [categoryId, setCategoryId] = useState(0);
-	const [paginationId, setPaginationId] = useState(0)
-	const [sort, setSort] = useState(
-		{ name: 'популярности ↓', sortProperty: 'rating', value: 'desc' },
-	);
+	const [paginationId, setPaginationId] = useState(0);
+
+	const categoryId = useSelector(state => state.filter.categoryId);
+	const sort = useSelector(state => state.filter.sort)
+	const dispatch = useDispatch();
 
 
 	useEffect(() => {
 		setIsLoading(true)
-		fetch(`https://66f02d71f2a8bce81be53926.mockapi.io/
-			pizzas?${categoryId ? `category=${categoryId}` : ''}
-			&sortBy=${sort.sortProperty}
-			&order=${sort.value}
-			&search=${searchValue.toLowerCase()}
-			&p=${paginationId + 1}
-			&l=6`)
+
+
+		axios.get(`https://66f02d71f2a8bce81be53926.mockapi.io/pizzas?${categoryId ? `category=${categoryId}` : ''}&sortBy=${sort.sortProperty}&order=${sort.value}&p=${paginationId + 1}&l=6`)
 			.then(res => {
-				return res.json()
-			})
-			.then(json => {
-				setPizza(json)
-				console.log(json)
-			})
-			.catch(err => {
-				console.log(err)
-			})
-			.finally(() => {
+				setPizza(res.data)
 				setIsLoading(false)
 			})
-
 
 		if (categoryId >= 1) {
 			setPaginationId(0)
@@ -51,18 +39,21 @@ const Home = ({ searchValue }) => {
 		window.scrollTo(0, 0)
 	}, [categoryId, sort, searchValue, paginationId])
 
-	
+
 	return (
 		<div className="container">
 			<div className="content__top">
-				<Categories categoryId={categoryId} setCategoryId={(i) => setCategoryId(i)} />
-				<Sort sort={sort} setSort={(i) => setSort(i)} />
+				<Categories categoryId={categoryId} setCategoryId={(i) => dispatch(setCategoryId(i))} />
+				<Sort />
 			</div>
 			<h2 className="content__title">Все пиццы</h2>
 			<div className="content__items">
 				{isLoading
 					? [...new Array(6)].map((_, index) => <PizzaSkeleton key={index} />)
 					: pizza
+						.filter(item => (
+							item.title.toLowerCase().includes(searchValue.toLowerCase())
+						))
 						.map(obj => (
 							<PizzaBlock {...obj} key={obj.id} />
 						))
