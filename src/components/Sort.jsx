@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSort } from '../redux/slices/filterSlice';
+
+
+
+export const sortList = [
+	{ name: 'популярности ↓', sortProperty: 'rating', value: 'desc' },
+	{ name: 'популярности ↑', sortProperty: 'rating asc', value: 'asc' },
+	{ name: 'цене ↓', sortProperty: 'price', value: 'desc' },
+	{ name: 'цене ↑', sortProperty: 'price asc', value: 'asc' },
+	{ name: 'алфавиту ↓', sortProperty: 'title', value: 'desc' },
+	{ name: 'алфавиту ↑', sortProperty: 'title asc', value: 'asc' },
+]
+
+
+
 const Sort = () => {
 
 
 	const [isVisible, setIsVisible] = useState(false);
-	const list = [
-		{ name: 'популярности ↓', sortProperty: 'rating', value: 'desc' },
-		{ name: 'популярности ↑', sortProperty: 'rating asc', value: 'asc' },
-		{ name: 'цене ↓', sortProperty: 'price', value: 'desc' },
-		{ name: 'цене ↑', sortProperty: 'price asc', value: 'asc' },
-		{ name: 'алфавиту ↓', sortProperty: 'title', value: 'desc' },
-		{ name: 'алфавиту ↑', sortProperty: 'title asc', value: 'asc' },
-	]
 
-	const sort = useSelector(state => state.filter.sort);
+	const { sort } = useSelector(state => state.filter);
 	const dispatch = useDispatch();
 
 	const onClickListActive = (sort) => {
@@ -45,7 +51,7 @@ const Sort = () => {
 			{isVisible && (
 				<div className="sort__popup">
 					<ul>
-						{list.map((item, index) => (
+						{sortList.map((item, index) => (
 							<li
 								onClick={() => onClickListActive(item)}
 								className={sort.sortProperty === item.sortProperty ? 'active' : ''}
