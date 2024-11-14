@@ -1,39 +1,38 @@
-import React from 'react';
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios'
 import qs from 'qs'
 
+import NotFoundBlock from '../components/NotFoundBlock'
 import Categories from '../components/Categories';
 import Sort, { sortList } from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock'
 import PizzaSkeleton from '../components/PizzaBlock/PizzaSkeleton';
 import Pagination from '../components/Pagination';
 import { setCategoryId, setFilter } from '../redux/slices/filterSlice'
+import { fetchPizzas } from '../redux/slices/pizzaSlice'
 
 
 const Home = ({ searchValue }) => {
 
-	const [pizza, setPizza] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
 	const [paginationId, setPaginationId] = useState(0);
 
-	const categoryId = useSelector(state => state.filter.categoryId);
-	const sort = useSelector(state => state.filter.sort);
+	const { items, status } = useSelector(state => state.pizzas)
+	const { categoryId, sort } = useSelector(state => state.filter);
 	const dispatch = useDispatch();
 	const navigate = useNavigate()
 
 	const isSearch = useRef(false);
 	const isMounted = useRef(false);
 
-	const fetchPizzas = () => {
-		setIsLoading(true);
-		axios.get(`https://66f02d71f2a8bce81be53926.mockapi.io/pizzas?${categoryId ? `category=${categoryId}` : ''}&sortBy=${sort.sortProperty}&order=${sort.value}&p=${paginationId + 1}&l=6`)
-			.then(res => {
-				setPizza(res.data)
-				setIsLoading(false)
-			})
+	const getPizzas = async () => {
+
+		dispatch(fetchPizzas({
+			categoryId,
+			sort: sort.sortProperty,
+			value: sort.value,
+			paginationId
+		}))
 
 		if (categoryId >= 1) {
 			setPaginationId(0)
@@ -65,7 +64,7 @@ const Home = ({ searchValue }) => {
 		window.scrollTo(0, 0)
 
 		if (!isSearch.current) {
-			fetchPizzas()
+			getPizzas()
 		}
 
 		isSearch.current = false
@@ -92,19 +91,26 @@ const Home = ({ searchValue }) => {
 				<Categories categoryId={categoryId} setCategoryId={(i) => dispatch(setCategoryId(i))} />
 				<Sort />
 			</div>
-			<h2 className="content__title">Все пиццы</h2>
-			<div className="content__items">
-				{isLoading
-					? [...new Array(6)].map((_, index) => <PizzaSkeleton key={index} />)
-					: pizza
-						.filter(item => (
-							item.title.toLowerCase().includes(searchValue.toLowerCase())
-						))
-						.map(obj => (
-							<PizzaBlock {...obj} key={obj.id} />
-						))
-				}
-			</div>
+			{status === 'error' ?
+				<NotFoundBlock />
+				: (
+					<>
+						<h2 className="content__title">Все пиццы</h2>
+						<div className="content__items">
+							{status === 'loading'
+								? [...new Array(6)].map((_, index) => <PizzaSkeleton key={index} />)
+								: items
+									.filter(item => (
+										item.title.toLowerCase().includes(searchValue.toLowerCase())
+									))
+									.map(obj => (
+										<PizzaBlock {...obj} key={obj.id} />
+									))
+							}
+						</div>
+					</>
+				)}
+
 			<Pagination paginationId={paginationId} setPaginationId={setPaginationId} />
 		</div>
 	);

@@ -1,4 +1,3 @@
-import React from 'react'
 import logo from '../assets/img/pizza-logo.svg'
 import { Link } from 'react-router-dom'
 import Search from './Search'

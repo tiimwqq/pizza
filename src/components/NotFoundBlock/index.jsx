@@ -1,14 +1,11 @@
-import React from 'react';
 
-import styles from './NotFoundBlock.module.scss'
 
 const NotFoundBlock = () => {
 
-console.log(styles)
 
 	return (
-		<div>
-			<h1 className={styles.root}>ничего не найдено😕</h1>
+		<div class='content__error-info'><h2>Произошла ошибка 😕</h2>
+			<p>К сожалению, не удалось получить питсы. Попробуйте повторить попытку позже.</p>
 		</div>
 	);
 };

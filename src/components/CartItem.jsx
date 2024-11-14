@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { addProduct, minusProduct, removeProduct } from '../redux/slices/cartSlice';
 
