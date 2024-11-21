@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import qs from 'qs'
 
@@ -13,12 +13,11 @@ import { setCategoryId, setFilter } from '../redux/slices/filterSlice'
 import { fetchPizzas } from '../redux/slices/pizzaSlice'
 
 
-const Home = ({ searchValue }) => {
-
+const Home = () => {
 	const [paginationId, setPaginationId] = useState(0);
 
 	const { items, status } = useSelector(state => state.pizzas)
-	const { categoryId, sort } = useSelector(state => state.filter);
+	const { categoryId, sort, searchValue } = useSelector(state => state.filter);
 	const dispatch = useDispatch();
 	const navigate = useNavigate()
 
@@ -104,7 +103,7 @@ const Home = ({ searchValue }) => {
 										item.title.toLowerCase().includes(searchValue.toLowerCase())
 									))
 									.map(obj => (
-										<PizzaBlock {...obj} key={obj.id} />
+										<Link to={`/pizzas/${obj.id}`} key={obj.id}><PizzaBlock {...obj} /></Link>
 									))
 							}
 						</div>

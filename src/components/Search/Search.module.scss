@@ -4,3 +4,22 @@
 	border-radius: 10px;
 	width: 350px;
 }
+
+@media (max-width: 1020px) {
+
+	.search {
+		margin-right: 5px;
+		margin-left: 5px;
+	}
+
+
+}
+
+@media (max-width: 640px) {
+
+	.search {
+		margin-bottom: 15px;
+	}
+
+
+}
