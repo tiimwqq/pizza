@@ -103,7 +103,7 @@ const Home = () => {
 										item.title.toLowerCase().includes(searchValue.toLowerCase())
 									))
 									.map(obj => (
-										<Link to={`/pizzas/${obj.id}`} key={obj.id}><PizzaBlock {...obj} /></Link>
+										<PizzaBlock {...obj} key={obj.id} />
 									))
 							}
 						</div>
