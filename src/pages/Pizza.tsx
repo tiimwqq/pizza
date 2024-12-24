@@ -1,10 +1,17 @@
 import axios from 'axios';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-const Pizza = () => {
+type PizzaItem = {
+	imageUrl: string;
+	title: string;
+	price: string;
+}
+
+const Pizza: React.FC<PizzaItem> = () => {
 	const { id } = useParams();
-	const [pizza, setPizza] = useState({});
+	const [pizza, setPizza] = useState<PizzaItem>();
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -22,12 +29,14 @@ const Pizza = () => {
 		fetchOnePizza()
 	}, []);
 
+	if (!pizza) {
+		return <>загрузка...</>
+	}
 
 	return (
 		<div className='container'>
-			<h1>{pizza.id}</h1>
 			<img src={pizza.imageUrl} alt="" />
-			<h2>{pizza.title}</h2>
+			<h2 >{pizza.title}</h2>
 			<h2>{pizza.price}</h2>
 		</div>
 	);

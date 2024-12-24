@@ -1,31 +1,29 @@
 import { useEffect, useState, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux';
 import qs from 'qs'
 
-import NotFoundBlock from '../components/NotFoundBlock'
+import NotFoundBlock from '../components/NotFoundBlock/index'
 import Categories from '../components/Categories';
 import Sort, { sortList } from '../components/Sort';
-import PizzaBlock from '../components/PizzaBlock'
+import PizzaBlock from '../components/PizzaBlock/index'
 import PizzaSkeleton from '../components/PizzaBlock/PizzaSkeleton';
-import Pagination from '../components/Pagination';
+import Pagination from '../components/Pagination/index';
 import { setCategoryId, setFilter } from '../redux/slices/filterSlice'
 import { fetchPizzas } from '../redux/slices/pizzaSlice'
+import React from 'react';
+import { RootState, useAppDispatch } from '../redux/store';
 
-
-const Home = () => {
+const Home: React.FC = () => {
 	const [paginationId, setPaginationId] = useState(0);
-
-	const { items, status } = useSelector(state => state.pizzas)
-	const { categoryId, sort, searchValue } = useSelector(state => state.filter);
-	const dispatch = useDispatch();
-	const navigate = useNavigate()
-
+	const { items, status } = useSelector((state: RootState) => state.pizzas)
+	const { categoryId, sort, searchValue } = useSelector((state: RootState) => state.filter);
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 	const isSearch = useRef(false);
 	const isMounted = useRef(false);
 
 	const getPizzas = async () => {
-
 		dispatch(fetchPizzas({
 			categoryId,
 			sort: sort.sortProperty,
@@ -38,23 +36,20 @@ const Home = () => {
 		}
 	}
 
-
 	// если был первый рендер проверяем url и сохраняем данные в redux
 	useEffect(() => {
 		if (window.location.search) {
 			const params = qs.parse(window.location.search.substring(1)); //находим параметры строки и парсим ее
 			const sort = sortList.find(obj => obj.sortProperty === params.sortProperty);
-			const value = sortList.find(obj => obj.value === params.value);
-
 
 			dispatch(
 				setFilter({
 					...params,
-					sort,
-					value,
+					sort: sort || { name: 'популярности ↓', sortProperty: 'rating', value: 'desc' },
+					searchValue: '',
+					categoryId: 0
 				})
 			)
-
 			isSearch.current = true
 		}
 	}, [])
@@ -65,10 +60,8 @@ const Home = () => {
 		if (!isSearch.current) {
 			getPizzas()
 		}
-
 		isSearch.current = false
 	}, [categoryId, sort, searchValue, paginationId])
-
 
 	useEffect(() => {
 		if (isMounted.current) {
@@ -80,7 +73,6 @@ const Home = () => {
 			});
 			navigate(`?${queryString}`) //создаем строку для вшития в url	
 		}
-
 		isMounted.current = true
 	}, [categoryId, sort, paginationId, navigate])
 
@@ -116,3 +108,4 @@ const Home = () => {
 };
 
 export default Home;
+
