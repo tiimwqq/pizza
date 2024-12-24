@@ -1,28 +1,38 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
-import { addProduct } from '../../redux/slices/cartSlice'
+import { addProduct, IcartItems } from '../../redux/slices/cartSlice'
+import { RootState } from '../../redux/store'
+import React from 'react';
 
+type PizzaBlockProps = {
+	id: string;
+	title: string;
+	imageUrl: string;
+	price: number;
+	types: number[];
+	sizes: number[];
+}
 
-function PizzaBlock({ id, title, imageUrl, price, types, sizes }) {
+const PizzaBlock: React.FC<PizzaBlockProps> = ({ id, title, imageUrl, price, types, sizes }) => {
 
 	const [activeType, setActiveType] = useState(0);
 	const [activeSize, setActiveSize] = useState(0);
-	const countProduct = useSelector(state => state.cart.items.find(obj => obj.id === id))
+	const countProduct = useSelector((state: RootState) => state.cart.items.find((obj: { id: string; }) => obj.id === id))
 	const dispatch = useDispatch();
 
 	const onClickAdd = () => {
-		const item = {
+		const item: IcartItems = {
 			id,
 			title,
 			imageUrl,
 			price,
 			type: types[activeType] === 0 ? 'тонкое' : 'традиционное',
-			size: `${sizes[activeSize]} см`
+			size: `${sizes[activeSize]} см`,
+			count: 0
 		}
 		dispatch(addProduct(item))
 	}
-
 
 	return (
 		<div className="pizza-block-wrapper">

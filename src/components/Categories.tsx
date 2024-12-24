@@ -7,9 +7,8 @@ type CategoriesProps = {
 
 const Categories: React.FC<CategoriesProps> = ({ categoryId, setCategoryId }) => {
 
-	const categories: string[] = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые']
-
-
+	const categories: string[] = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
+	
 	return (
 		<div className="categories">
 			<ul>
