@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { LocalStorageService } from '../../utils/LocalStorageService';
 
 export interface IcartItems {
 	id: string;
@@ -16,8 +17,8 @@ interface IinitialState {
 }
 
 const initialState: IinitialState = {
-	totalPrice: 0,
-	items: []
+	totalPrice: LocalStorageService.get('cartPrice') || 0,
+	items: LocalStorageService.get('cartItems') || []
 }
 
 export const cartSlice = createSlice({
@@ -48,6 +49,10 @@ export const cartSlice = createSlice({
 			} else if (findItem) {
 				state.items = state.items.filter(obj => obj !== findItem);
 			}
+
+			state.totalPrice = state.items.reduce((sum, obj) => {
+				return obj.price * obj.count + sum;
+			}, 0);
 
 		},
 		removeProduct(state, { payload }: PayloadAction<IcartItems>) {
