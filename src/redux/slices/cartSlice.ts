@@ -1,20 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { LocalStorageService } from '../../utils/LocalStorageService';
-
-export interface IcartItems {
-	id: string;
-	imageUrl: string;
-	title: string;
-	type: string;
-	size: string;
-	price: number;
-	count: number;
-}
-
-interface IinitialState {
-	totalPrice: number;
-	items: IcartItems[];
-}
+import { IinitialState, IcartItems } from './types';
 
 const initialState: IinitialState = {
 	totalPrice: LocalStorageService.get('cartPrice') || 0,

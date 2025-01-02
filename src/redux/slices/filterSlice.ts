@@ -1,16 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-export type SortProps = {
-	name: string;
-	sortProperty: 'rating' | 'rating asc' | 'price' | 'price asc' | 'title' | 'title asc';
-	value: 'desc' | 'asc'
-}
-
-export interface IfilterSlice {
-	searchValue: string;
-	categoryId: number;
-	sort: SortProps;
-}
+import { IfilterSlice, SortProps } from './types'
 
 const initialState: IfilterSlice = {
 	searchValue: '',
