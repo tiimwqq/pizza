@@ -17,3 +17,4 @@ export type AppDispatch = typeof store.dispatch;
 
 // Создаем хук для типизированного dispatch
 export const useAppDispatch: () => AppDispatch = useDispatch;
+

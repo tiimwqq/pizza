@@ -27,7 +27,7 @@ const Pizza: React.FC<PizzaItem> = () => {
 		}
 
 		fetchOnePizza()
-	}, []);
+	}, [id, navigate]);
 
 	if (!pizza) {
 		return <>загрузка...</>

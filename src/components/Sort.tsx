@@ -1,8 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, useRef, useEffect, memo } from 'react';
+import { useDispatch } from 'react-redux';
 import { setSort, SortProps } from '../redux/slices/filterSlice';
 import React from 'react';
-import { RootState } from '../redux/store';
 
 export const sortList: SortProps[] = [
 	{ name: 'популярности ↓', sortProperty: 'rating', value: 'desc' },
@@ -13,12 +12,13 @@ export const sortList: SortProps[] = [
 	{ name: 'алфавиту ↑', sortProperty: 'title asc', value: 'asc' },
 ]
 
+type SortPopupProps = {
+	sort: SortProps
+}
 
-
-const Sort: React.FC = () => {
+const Sort: React.FC<SortPopupProps> = memo(({ sort }) => {
 	const [isVisible, setIsVisible] = useState(false);
 
-	const { sort } = useSelector((state: RootState) => state.filter);
 	const dispatch = useDispatch();
 	const sortRef = useRef<HTMLDivElement>(null);
 
@@ -31,7 +31,6 @@ const Sort: React.FC = () => {
 		const handleClickOutside = (e: MouseEvent) => {
 			if (sortRef.current && !e.composedPath().includes(sortRef.current)) {
 				setIsVisible(false)
-				console.log('click')
 			}
 		}
 
@@ -39,7 +38,6 @@ const Sort: React.FC = () => {
 
 		return () => {
 			document.body.removeEventListener('click', handleClickOutside)
-			console.log('click remove')
 		}
 	}, [])
 
@@ -77,6 +75,6 @@ const Sort: React.FC = () => {
 			)}
 		</div>
 	);
-};
+});
 
 export default Sort;

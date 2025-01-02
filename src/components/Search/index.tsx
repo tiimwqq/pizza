@@ -8,6 +8,7 @@ const Search: React.FC = () => {
 	const dispatch = useDispatch();
 	const [value, setValue] = useState('')
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const debounceSearchInput = useCallback(
 		debounce((str: string) => {
 			dispatch(setSearchValue(str))

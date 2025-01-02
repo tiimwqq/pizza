@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import qs from 'qs'
@@ -36,6 +36,11 @@ const Home: React.FC = () => {
 		}
 	}
 
+	const onChangeCategory = useCallback((i: number) => {
+		dispatch(setCategoryId(i))
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
 	// если был первый рендер проверяем url и сохраняем данные в redux
 	useEffect(() => {
 		if (window.location.search) {
@@ -52,6 +57,7 @@ const Home: React.FC = () => {
 			)
 			isSearch.current = true
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	useEffect(() => {
@@ -61,6 +67,7 @@ const Home: React.FC = () => {
 			getPizzas()
 		}
 		isSearch.current = false
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [categoryId, sort, searchValue, paginationId])
 
 	useEffect(() => {
@@ -79,8 +86,8 @@ const Home: React.FC = () => {
 	return (
 		<div className="container">
 			<div className="content__top">
-				<Categories categoryId={categoryId} setCategoryId={(i) => dispatch(setCategoryId(i))} />
-				<Sort />
+				<Categories categoryId={categoryId} setCategoryId={onChangeCategory} />
+				<Sort sort={sort} />
 			</div>
 			{status === 'error' ?
 				<NotFoundBlock />
