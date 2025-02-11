@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
-import { addProduct, IcartItems, minusProduct, removeProduct } from '../redux/slices/cartSlice';
+import { addProduct, minusProduct, removeProduct } from '../redux/slices/cartSlice';
+import { IcartItems } from '../redux/slices/types';
 import React from 'react';
 
 const CartItem: React.FC<IcartItems> = ({ id, imageUrl, title, type, size, price, count }) => {

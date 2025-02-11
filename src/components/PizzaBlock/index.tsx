@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
-import { addProduct, IcartItems } from '../../redux/slices/cartSlice'
+import { addProduct } from '../../redux/slices/cartSlice'
 import { RootState } from '../../redux/store'
+import { IcartItems } from '../../redux/slices/types'
 import React from 'react';
 
 type PizzaBlockProps = {
